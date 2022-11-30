@@ -1,6 +1,7 @@
 import json
+a = {}
+for x in range(40000, 40200):
+    a[str(x)] = '00'
 
-a = {'a': 0}
-
-with open('test.json', 'w')as test:
+with open('db.json', 'w')as test:
     json.dump(a, test)
