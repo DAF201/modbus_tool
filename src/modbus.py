@@ -47,6 +47,7 @@ class modbus_serial(serial.Serial):
         while (1):
             try:
                 self.recving_buffer = self.read(128)
+                # print(self.recving_buffer)
                 hex_data = self.recving_buffer.hex()
                 if hex_data != '':
                     print(hex_data)
@@ -74,19 +75,20 @@ class modbus_serial(serial.Serial):
                 modbus_message = self.modbus_message_pool[0]
                 self.modbus_message_pool.pop(0)
                 if modbus_message['function_type'] == '03':
-                    # print('reading')
+                    print('reading', modbus_message['register_address'])
                     ret = modbus_message['host_address'] + \
                         modbus_message['function_type'] + \
                         hex(2*int(
                             modbus_message['number_of_register'], 16))[2:].zfill(2)
                     for x in range(2*int(modbus_message['number_of_register'], 16)):
                         ret += self.data_base[str(
-                            int(modbus_message['register_address'], 16)+x)]
+                            int(modbus_message['register_address'], 16)+x-1)]
                     ret += self.__modbus_calculate(ret)
-                    ret: str
-                    ret = ret.encode()
+                    ret = bytes.fromhex(ret)
                     self.write(ret)
-                    print(ret)
+                    print(ret.hex())
+                if modbus_message['function_type'] == '10':
+                    pass
             except Exception as e:
                 print(e)
                 pass
