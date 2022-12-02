@@ -4,6 +4,7 @@ import threading
 import gc
 import json
 import sys
+import os
 
 AVAILABLE_SERIAL_PORTS = [x.device
                           for x in serial.tools.list_ports.comports()]
@@ -62,6 +63,8 @@ class MODBUS(serial.Serial):
 
                 if not self.__modbus_CRC_check(hex_data):
                     continue
+
+                print('recv:', hex_data)
 
                 self.message_pool.append([hex_data[:2], hex_data[2:4],
                                           hex_data[4:8], hex_data[8:-4]])
@@ -149,7 +152,11 @@ def main():
     argparser.add_argument('-x', '--xonxoff', type=int, default=0)
     argparser.add_argument('-r', '--rtscts', type=int, default=0)
     argparser.add_argument('-d', '--dsrdtr', type=int, default=0)
+    argparser.add_argument('-v', '-visual', type=int, default=0)
     args = argparser.parse_args()
+
+    if args.visual is None:
+        sys.stdout = open(os.devnull, 'w')
 
     simulator = MODBUS(args.serial, timeout=args.timeout,
                        baudrate=args.baudrate, xonxoff=args.xonxoff, rtscts=args.rtscts, dsrdtr=args.dsrdtr)
