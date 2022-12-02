@@ -54,7 +54,7 @@ class MODBUS(serial.Serial):
             except Exception as general_exception:
                 print(general_exception)
             finally:
-                time.sleep(30)
+                time.sleep(5)
 
     def stop(self):
         self.ALIVE = False
