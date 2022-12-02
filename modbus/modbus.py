@@ -142,7 +142,7 @@ class MODBUS(serial.Serial):
 def main():
     import argparse
     argparser = argparse.ArgumentParser()
-    argparser.add_argument('help', type=str)
+    argparser.add_argument('help', '--help', type=str)
     args = argparser.parse_args()
     print(args)
     print(argparser.help)
