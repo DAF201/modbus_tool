@@ -6,6 +6,7 @@ import json
 import sys
 import os
 import argparse
+import time
 
 AVAILABLE_SERIAL_PORTS = [x.device
                           for x in serial.tools.list_ports.comports()]
@@ -47,7 +48,13 @@ class MODBUS(serial.Serial):
         self.__receive_message_thread.start()
         self.__response_message_thread.start()
         while (self.ALIVE):
-            pass
+            try:
+                with open('db.json', 'r')as json_db:
+                    VIRTUAL_DB = json.load(json_db)
+            except Exception as general_exception:
+                print(general_exception)
+            finally:
+                time.sleep(30)
 
     def stop(self):
         self.ALIVE = False
@@ -154,7 +161,7 @@ def main():
     argparser.add_argument('-r', '--rtscts', type=int, default=0)
     argparser.add_argument('-d', '--dsrdtr', type=int, default=0)
     argparser.add_argument('-v', '--visual', action='store_true')
-    
+
     args = argparser.parse_args()
 
     if not args.visual:
