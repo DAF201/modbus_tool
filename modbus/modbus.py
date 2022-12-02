@@ -150,14 +150,7 @@ def main():
     argparser.add_argument('-r', '--rtscts', type=int, default=0)
     argparser.add_argument('-d', '--dsrdtr', type=int, default=0)
     args = argparser.parse_args()
-    print(args)
-    print(args.serial)
-    print(args.timeout)
-    print(args.baudrate)
-    print(args.xonxoff)
-    print(args.rtscts)
-    print(args.dsrdtr)
 
-    simulator = MODBUS(AVAILABLE_SERIAL_PORTS[0], timeout=0.15,
-                       baudrate=115200, xonxoff=False, rtscts=False, dsrdtr=False)
+    simulator = MODBUS(args.serial, timeout=args.timeout,
+                       baudrate=args.baudrate, xonxoff=args.xonxoff, rtscts=args.rtscts, dsrdtr=args.dsrdtr)
     simulator.start()
