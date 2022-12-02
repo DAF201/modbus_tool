@@ -5,6 +5,7 @@ import gc
 import json
 import sys
 import os
+import argparse
 
 AVAILABLE_SERIAL_PORTS = [x.device
                           for x in serial.tools.list_ports.comports()]
@@ -143,8 +144,8 @@ class MODBUS(serial.Serial):
 
 
 def main():
-    import argparse
     argparser = argparse.ArgumentParser()
+
     argparser.add_argument('-s', '--serial', type=str,
                            default=AVAILABLE_SERIAL_PORTS[0])
     argparser.add_argument('-t', '--timeout', type=float, default=0.15)
@@ -153,6 +154,7 @@ def main():
     argparser.add_argument('-r', '--rtscts', type=int, default=0)
     argparser.add_argument('-d', '--dsrdtr', type=int, default=0)
     argparser.add_argument('-v', '--visual', action='store_true')
+    
     args = argparser.parse_args()
 
     if not args.visual:
