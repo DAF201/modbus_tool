@@ -19,3 +19,6 @@ simu [-s --serial default: first COM available]
      [-d --dsrdtr default: 0]
      [-v --visual default: 0]
 ```
+
+![](https://github.com/DAF201/virtual_simulator/blob/main/images/D0EFDD72-7736-4F98-911D-A29A7BC1CAE2.jpg)
+![](https://github.com/DAF201/virtual_simulator/blob/main/images/Screenshot%20(126).png)
