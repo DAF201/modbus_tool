@@ -85,7 +85,6 @@ class MODBUS(serial.Serial):
                 if message[1] == '10':
 
                     data = []
-                    print(message)
                     for x, y in zip(*[iter(self.data_split(message[3][6:], size=2, hex=False))]*2):
                         data.append(x+y)
 
@@ -138,7 +137,9 @@ class MODBUS(serial.Serial):
         return super().__del__()
 
 
-def main():
+def main(*args):
+    print(args)
     simulator = MODBUS(AVAILABLE_SERIAL_PORTS[0], timeout=0.15,
                        baudrate=115200, xonxoff=False, rtscts=False, dsrdtr=False)
     simulator.start()
+
