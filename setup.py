@@ -9,7 +9,7 @@ setuptools.setup(
     url='https://github.com/DAF201/modbus_tool',
     download_url='https://github.com/DAF201/modbus_tool',
     install_requires=['pyserial>=3.5'],
-    packages=['src'],
+    packages=['modbus'],
     classifiers=[
         'Programming Language :: Python :: 3',
         'Operating System :: MacOS',
@@ -18,7 +18,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'simu=src.modbus:main',
+            'simu=modbus.modbus:main',
         ],
     },
     python_requires=">=3.9",

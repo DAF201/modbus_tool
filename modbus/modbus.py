@@ -7,9 +7,19 @@ AVAILABLE_SERIAL_PORTS = [x.device
                           for x in serial.tools.list_ports.comports()]
 
 VIRTUAL_DB = {}
+try:
+    with open('db.json', 'r')as json_db:
+        VIRTUAL_DB = json.load(json_db)
+except:
+    temp = {}
+    for x in range(40000, 50000):
+        temp[x] = '0000'
 
-with open('db.json', 'r')as json_db:
-    VIRTUAL_DB = json.load(json_db)
+    with open('db.json', 'w')as db_json:
+        json.dump(temp, db_json)
+
+    with open('db.json', 'r')as json_db:
+        VIRTUAL_DB = json.load(json_db)
 
 
 class MODBUS(serial.Serial):
@@ -132,4 +142,3 @@ def main():
     simulator = MODBUS(AVAILABLE_SERIAL_PORTS[0], timeout=0.15,
                        baudrate=115200, xonxoff=False, rtscts=False, dsrdtr=False)
     simulator.start()
-
