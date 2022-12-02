@@ -3,6 +3,8 @@ import serial.tools.list_ports
 import threading
 import gc
 import json
+import sys
+
 AVAILABLE_SERIAL_PORTS = [x.device
                           for x in serial.tools.list_ports.comports()]
 
@@ -137,9 +139,12 @@ class MODBUS(serial.Serial):
         return super().__del__()
 
 
-def main(*args):
+def main():
+    import argparse
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument('help', type=str)
+    args = argparser.parse_args()
     print(args)
     simulator = MODBUS(AVAILABLE_SERIAL_PORTS[0], timeout=0.15,
                        baudrate=115200, xonxoff=False, rtscts=False, dsrdtr=False)
     simulator.start()
-
