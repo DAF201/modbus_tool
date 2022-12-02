@@ -142,8 +142,13 @@ class MODBUS(serial.Serial):
 def main():
     import argparse
     argparser = argparse.ArgumentParser()
-    argparser.add_argument('-a')
-    argparser.add_argument('-b')
+    argparser.add_argument('-s', '--serial', type=str,
+                           default=AVAILABLE_SERIAL_PORTS[0])
+    argparser.add_argument('-t', '--timeout', type=float, default=0.15)
+    argparser.add_argument('-b', '--baudrate', type=int, default=115200)
+    argparser.add_argument('-x', '-xonxoff', type=int, default=0)
+    argparser.add_argument('-r', '-rtscts', type=int, default=0)
+    argparser.add_argument('-d', '-dsrdtr', type=int, default=0)
     args = argparser.parse_args()
     print(args)
     simulator = MODBUS(AVAILABLE_SERIAL_PORTS[0], timeout=0.15,
