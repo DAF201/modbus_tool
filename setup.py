@@ -21,5 +21,5 @@ setuptools.setup(
             'simu=src.modbus:main',
         ],
     },
-    python_requires=">=3",
+    python_requires=">=3.9",
 )

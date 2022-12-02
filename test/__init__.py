@@ -7,9 +7,19 @@ AVAILABLE_SERIAL_PORTS = [x.device
                           for x in serial.tools.list_ports.comports()]
 
 VIRTUAL_DB = {}
+try:
+    with open('db.json', 'r')as json_db:
+        VIRTUAL_DB = json.load(json_db)
+except:
+    a = {}
+    for x in range(40000, 50000):
+        a[x] = '0000'
 
-with open('db.json', 'r')as json_db:
-    VIRTUAL_DB = json.load(json_db)
+    with open('db.json', 'w')as test:
+        json.dump(a, test)
+
+    with open('db.json', 'r')as json_db:
+        VIRTUAL_DB = json.load(json_db)
 
 
 class MODBUS(serial.Serial):
