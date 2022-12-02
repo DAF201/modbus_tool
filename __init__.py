@@ -18,6 +18,7 @@ class MODBUS(serial.Serial):
         self.__receive_message_thread: threading.Thread
         self.__response_message_thread: threading.Thread
         self.message_pool: list
+        self.message_pool = []
         self.ALIVE = True
 
     def start(self):
@@ -52,41 +53,55 @@ class MODBUS(serial.Serial):
 
                 self.message_pool.append([hex_data[:2], hex_data[2:4],
                                           hex_data[4:8], hex_data[8:-4]])
-
                 gc.collect()
 
-            except:
-                pass
+            except Exception as general_exception:
+                gc.collect()
+                print(general_exception)
 
     def __response_message(self):
         while (1):
             try:
-                pass
-            except:
-                pass
+                if len(self.message_pool) == 0:
+                    continue
+                message = self.message_pool.pop(0)
+                if message[1] == '03':
+                    response = self.__modbus_response_formator(message)
+                    self.write(bytes.fromhex(response))
+                    print(response)
+            except Exception as general_exception:
+                gc.collect()
+                print(general_exception)
 
-    def __modbus_CRC_check(self, data: str) -> str:
+    def __modbus_response_formator(self, message: list):
+        ret = message[0]+message[1]+hex(2*int(message[3], 16))[2:].zfill(2)
+        for x in range(int(message[3], 16)):
+            ret += VIRTUAL_DB[str(int(message[2], 16)+x)]
+        ret += self.__modbus_CRC_calculate(ret)
+        return ret
+
+    def __modbus_CRC_calculate(self, data: str) -> str:
         def data_split(data: str, size=2) -> list:
             return [int(data[x-size:x], 16) for x in range(size, len(data)+size, size)]
 
-        def __modbus_CRC_calculate(data: str) -> str:
-            crc = 0xffff
-            A001H = 0xA001
-            data = data_split(data)
+        crc = 0xffff
+        A001H = 0xA001
+        data = data_split(data)
 
-            for x in data:
-                crc = crc ^ x
-                for i in range(0, 8):
-                    if bin(crc)[-1:] == '1':
-                        crc = crc >> 1
-                        crc = crc ^ A001H
-                    else:
-                        crc = crc >> 1
+        for x in data:
+            crc = crc ^ x
+            for i in range(0, 8):
+                if bin(crc)[-1:] == '1':
+                    crc = crc >> 1
+                    crc = crc ^ A001H
+                else:
+                    crc = crc >> 1
 
-            res = hex((crc >> 8) | (crc << 8))
-            return (res[int(len(res)/2):])
+        res = hex((crc >> 8) | (crc << 8))
+        return (res[int(len(res)/2):])
 
-        return __modbus_CRC_calculate(data[:-4]) == data[-4:]
+    def __modbus_CRC_check(self, data: str) -> str:
+        return self.__modbus_CRC_calculate(data[:-4]) == data[-4:]
 
     def __del__(self) -> None:
         gc.collect()
