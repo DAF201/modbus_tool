@@ -153,23 +153,26 @@ class MODBUS(serial.Serial):
 
 
 def main():
-    argparser = argparse.ArgumentParser()
+    if len(AVAILABLE_SERIAL_PORTS) != 0:
+        argparser = argparse.ArgumentParser()
 
-    argparser.add_argument('-s', '--serial', type=str,
-                           default=AVAILABLE_SERIAL_PORTS[0])
-    argparser.add_argument('-t', '--timeout', type=float, default=0.15)
-    argparser.add_argument('-b', '--baudrate', type=int, default=115200)
-    argparser.add_argument('-x', '--xonxoff', type=int, default=0)
-    argparser.add_argument('-r', '--rtscts', type=int, default=0)
-    argparser.add_argument('-d', '--dsrdtr', type=int, default=0)
-    argparser.add_argument('-u', '--update', type=int, default=1)
-    argparser.add_argument('-v', '--visual', action='store_true')
+        argparser.add_argument('-s', '--serial', type=str,
+                               default=AVAILABLE_SERIAL_PORTS[0])
+        argparser.add_argument('-t', '--timeout', type=float, default=0.15)
+        argparser.add_argument('-b', '--baudrate', type=int, default=115200)
+        argparser.add_argument('-x', '--xonxoff', type=int, default=0)
+        argparser.add_argument('-r', '--rtscts', type=int, default=0)
+        argparser.add_argument('-d', '--dsrdtr', type=int, default=0)
+        argparser.add_argument('-u', '--update', type=int, default=1)
+        argparser.add_argument('-v', '--visual', action='store_true')
 
-    args = argparser.parse_args()
+        args = argparser.parse_args()
 
-    if not args.visual:
-        sys.stdout = open(os.devnull, 'w')
+        if not args.visual:
+            sys.stdout = open(os.devnull, 'w')
 
-    simulator = MODBUS(args.update, args.serial, timeout=args.timeout,
-                       baudrate=args.baudrate, xonxoff=args.xonxoff, rtscts=args.rtscts, dsrdtr=args.dsrdtr)
-    simulator.start()
+        simulator = MODBUS(args.update, args.serial, timeout=args.timeout,
+                           baudrate=args.baudrate, xonxoff=args.xonxoff, rtscts=args.rtscts, dsrdtr=args.dsrdtr)
+        simulator.start()
+    else:
+        print("NO SERIAL PORT AVAILABLE")
