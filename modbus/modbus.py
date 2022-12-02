@@ -155,7 +155,7 @@ def main():
     argparser.add_argument('-v', '--visual', type=int, default=0)
     args = argparser.parse_args()
 
-    if args.visual is None:
+    if not args.visual:
         sys.stdout = open(os.devnull, 'w')
 
     simulator = MODBUS(args.serial, timeout=args.timeout,
