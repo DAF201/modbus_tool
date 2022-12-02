@@ -152,7 +152,7 @@ def main():
     argparser.add_argument('-x', '--xonxoff', type=int, default=0)
     argparser.add_argument('-r', '--rtscts', type=int, default=0)
     argparser.add_argument('-d', '--dsrdtr', type=int, default=0)
-    argparser.add_argument('-v', '-visual', type=int, default=0)
+    argparser.add_argument('-v', '--visual', type=int, default=0)
     args = argparser.parse_args()
 
     if args.visual is None:
