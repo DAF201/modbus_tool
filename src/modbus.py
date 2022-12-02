@@ -128,6 +128,8 @@ class MODBUS(serial.Serial):
         return super().__del__()
 
 
-test = MODBUS(AVAILABLE_SERIAL_PORTS[0], timeout=0.15,
-              baudrate=115200, xonxoff=False, rtscts=False, dsrdtr=False)
-test.start()
+def main():
+    simulator = MODBUS(AVAILABLE_SERIAL_PORTS[0], timeout=0.15,
+                       baudrate=115200, xonxoff=False, rtscts=False, dsrdtr=False)
+    simulator.start()
+
