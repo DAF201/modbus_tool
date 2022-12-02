@@ -49,6 +49,7 @@ class MODBUS(serial.Serial):
         self.__response_message_thread.start()
         while (self.ALIVE):
             try:
+                global VIRTUAL_DB
                 with open('db.json', 'r')as json_db:
                     VIRTUAL_DB = json.load(json_db)
             except Exception as general_exception:
