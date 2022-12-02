@@ -28,7 +28,8 @@ except:
 
 
 class MODBUS(serial.Serial):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, data_update_period, *args, **kwargs):
+        self.data_update_period = data_update_period
         super().__init__(*args, **kwargs)
         self.__receive_message_thread: threading.Thread
         self.__response_message_thread: threading.Thread
@@ -55,7 +56,7 @@ class MODBUS(serial.Serial):
             except Exception as general_exception:
                 print(general_exception)
             finally:
-                time.sleep(5)
+                time.sleep(self.data_update_period)
 
     def stop(self):
         self.ALIVE = False
@@ -161,6 +162,7 @@ def main():
     argparser.add_argument('-x', '--xonxoff', type=int, default=0)
     argparser.add_argument('-r', '--rtscts', type=int, default=0)
     argparser.add_argument('-d', '--dsrdtr', type=int, default=0)
+    argparser.add_argument('-u', '--update', type=int, default=1)
     argparser.add_argument('-v', '--visual', action='store_true')
 
     args = argparser.parse_args()
@@ -168,6 +170,6 @@ def main():
     if not args.visual:
         sys.stdout = open(os.devnull, 'w')
 
-    simulator = MODBUS(args.serial, timeout=args.timeout,
+    simulator = MODBUS(args.update, args.serial, timeout=args.timeout,
                        baudrate=args.baudrate, xonxoff=args.xonxoff, rtscts=args.rtscts, dsrdtr=args.dsrdtr)
     simulator.start()
