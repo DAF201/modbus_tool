@@ -142,10 +142,9 @@ class MODBUS(serial.Serial):
 def main():
     import argparse
     argparser = argparse.ArgumentParser()
-    argparser.add_argument('help', '--help', type=str)
+    argparser.add_argument('help')
     args = argparser.parse_args()
     print(args)
-    print(args.help)
     simulator = MODBUS(AVAILABLE_SERIAL_PORTS[0], timeout=0.15,
                        baudrate=115200, xonxoff=False, rtscts=False, dsrdtr=False)
     simulator.start()
